@@ -1,21 +1,36 @@
+/**
+ * Rectangle Component
+ * 
+ * A dynamic SVG rectangle that can be resized by dragging.
+ * Features:
+ * - Real-time dimension updates
+ * - Perimeter calculation
+ * - Backend validation
+ * - Visual feedback during resizing and validation
+ * 
+ * @author hega4444
+ * @date January 31, 2025
+ */
+
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { Box, Typography, Paper, Badge, Snackbar, Alert } from '@mui/material';
 
 interface RectangleDimensions {
-    width: number;
-    height: number;
+    Width: number;
+    Height: number;
 }
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_BASE_URL = 'http://localhost:5000';
 
 const Rectangle: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
-    const [dimensions, setDimensions] = useState<RectangleDimensions>({ width: 200, height: 150 });
+    const [dimensions, setDimensions] = useState<RectangleDimensions>({ Width: 200, Height: 150 });
     const [perimeter, setPerimeter] = useState<number>(0);
     const [error, setError] = useState<string>('');
     const [isResizing, setIsResizing] = useState(false);
     const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+    const [hasValidationError, setHasValidationError] = useState(false);
 
     // Colors without transparency effects
     const colors = {
@@ -24,20 +39,43 @@ const Rectangle: React.FC = () => {
     };
 
     const calculatePerimeter = useCallback((dims: RectangleDimensions) => {
-        setPerimeter(2 * (dims.width + dims.height));
+        const newPerimeter = 2 * (dims.Width + dims.Height);
+        if (!isNaN(newPerimeter)) {
+            setPerimeter(newPerimeter);
+        }
     }, []);
 
+    // Load initial dimensions
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/rectangle`)
-            .then(response => response.json())
-            .then((data: RectangleDimensions) => {
-                setDimensions(data);
-                calculatePerimeter(data);
-            })
-            .catch(() => {
-                // Backend is off, use initial values
-                calculatePerimeter(dimensions);
-            });
+        const loadInitialDimensions = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/rectangle`);
+                if (!response.ok) {
+                    throw new Error(`Server returned ${response.status}`);
+                }
+                const data = await response.json();
+                
+                if (typeof data.width === 'number' && typeof data.height === 'number') {
+                    // Convert from backend format to frontend format
+                    const dims = { 
+                        Width: data.width, 
+                        Height: data.height 
+                    };
+                    setDimensions(dims);
+                    calculatePerimeter(dims);
+                } else {
+                    throw new Error('Invalid data format from server');
+                }
+            } catch (error) {
+                console.error('Failed to fetch:', error);
+                setError('Unable to connect to server. Working in offline mode.');
+                const initialDims = { Width: 200, Height: 150 };
+                setDimensions(initialDims);
+                calculatePerimeter(initialDims);
+            }
+        };
+
+        loadInitialDimensions();
     }, [calculatePerimeter]);
 
     // Update container size on mount and window resize
@@ -59,6 +97,7 @@ const Rectangle: React.FC = () => {
 
     const handleMouseDown = (e: React.MouseEvent<SVGRectElement>) => {
         setIsResizing(true);
+        setHasValidationError(false);
         setStartPos({ x: e.clientX, y: e.clientY });
     };
 
@@ -71,16 +110,16 @@ const Rectangle: React.FC = () => {
 
             // Constrain dimensions within container
             const newWidth = Math.min(
-                Math.max(50, dimensions.width + deltaX),
+                Math.max(50, dimensions.Width + deltaX),
                 containerSize.width
             );
             const newHeight = Math.min(
-                Math.max(50, dimensions.height + deltaY),
+                Math.max(50, dimensions.Height + deltaY),
                 containerSize.height
             );
 
-            setDimensions({ width: newWidth, height: newHeight });
-            calculatePerimeter({ width: newWidth, height: newHeight });
+            setDimensions({ Width: newWidth, Height: newHeight });
+            calculatePerimeter({ Width: newWidth, Height: newHeight });
             setStartPos({ x: e.clientX, y: e.clientY });
         });
     }, [isResizing, startPos, dimensions, calculatePerimeter, containerSize]);
@@ -90,7 +129,6 @@ const Rectangle: React.FC = () => {
         
         setIsResizing(false);
         
-        // Update backend
         fetch(`${API_BASE_URL}/api/rectangle`, {
             method: 'POST',
             headers: {
@@ -98,13 +136,18 @@ const Rectangle: React.FC = () => {
             },
             body: JSON.stringify(dimensions)
         })
-            .then(response => {
+            .then(async response => {
+                const data = await response.json();
                 if (!response.ok) {
-                    return response.json().then(err => { throw err; });
+                    setHasValidationError(true);
+                    throw new Error(data.error || 'Error saving changes');
                 }
-                return response.json();
+                setHasValidationError(false);
+                return data;
             })
-            .catch(err => setError(err.message));
+            .catch(err => {
+                setError(err.message);
+            });
     }, [isResizing, dimensions]);
 
     useEffect(() => {
@@ -118,6 +161,22 @@ const Rectangle: React.FC = () => {
             window.removeEventListener('mouseup', handleMouseUp);
         };
     }, [isResizing, handleMouseMove, handleMouseUp]);
+
+    // Only render when dimensions are loaded
+    if (!dimensions) {
+        return (
+            <Box sx={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                height: '100vh' 
+            }}>
+                <Typography variant="h6" sx={{ color: 'white' }}>
+                    Loading...
+                </Typography>
+            </Box>
+        );
+    }
 
     return (
         <Box sx={{ 
@@ -174,10 +233,10 @@ const Rectangle: React.FC = () => {
                 }}
             >
                 <svg 
-                    width={dimensions.width} 
-                    height={dimensions.height} 
+                    width={dimensions.Width} 
+                    height={dimensions.Height} 
                     style={{ 
-                        cursor: isResizing ? colors.editing : colors.success,
+                        cursor: isResizing || hasValidationError ? colors.editing : colors.success,
                         maxWidth: containerSize.width,
                         maxHeight: containerSize.height,
                         minWidth: '50px',
@@ -186,10 +245,10 @@ const Rectangle: React.FC = () => {
                     }}
                 >
                     <rect
-                        width={dimensions.width}
-                        height={dimensions.height}
+                        width={dimensions.Width}
+                        height={dimensions.Height}
                         fill="transparent"
-                        stroke={isResizing ? colors.editing : colors.success}
+                        stroke={isResizing || hasValidationError ? colors.editing : colors.success}
                         strokeWidth="6"
                         onMouseDown={handleMouseDown}
                         style={{ cursor: 'nwse-resize' }}
@@ -243,36 +302,36 @@ const Rectangle: React.FC = () => {
                     fontSize: '1.4rem',    // Increased from 1.25rem
                     fontWeight: 600       // Increased from 500 to 600 for bolder text
                 }}>
-                    Rectangle Information
+                    Rectangle App ;)
                 </Typography>
-                <Typography variant="body1" sx={{ color: 'white', mb: 1.5 }}>
+                <Typography variant="body1" sx={{ color: 'white', mb: 1.5, fontWeight: 'bold', opacity: 0.9 }}>
                     Perimeter: {Math.round(perimeter)}px
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'white', opacity: 0.7, mb: 1 }}>
-                    Width: {Math.round(dimensions.width)}px
+                <Typography variant="body2" sx={{ color: 'white', opacity: 0.5, mb: 1 }}>
+                    Width: {Math.round(dimensions.Width)}px
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'white', opacity: 0.7 }}>
-                    Height: {Math.round(dimensions.height)}px
+                <Typography variant="body2" sx={{ color: 'white', opacity: 0.5 }}>
+                    Height: {Math.round(dimensions.Height)}px
                 </Typography>
             </Paper>
 
             <Snackbar
                 open={!!error}
-                autoHideDuration={3000}
+                autoHideDuration={5000} // Increased to 5 seconds
                 onClose={() => setError('')}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             >
                 <Alert 
-                    severity="error" 
+                    severity="warning" // Changed from error to warning
                     sx={{ 
                         width: '100%',
-                        bgcolor: 'rgba(40, 0, 60, 0.95)', // Dark purple background
-                        color: '#fff',  // White text
+                        bgcolor: 'rgba(40, 0, 60, 0.95)',
+                        color: '#fff',
                         '& .MuiAlert-icon': {
-                            color: '#ff6b6b'  // Error icon color
+                            color: colors.editing  // Use the editing color for warnings
                         },
                         backdropFilter: 'blur(8px)',
-                        border: '1px solid rgba(255,99,99,0.2)',  // Subtle red border
+                        border: '1px solid rgba(255,99,99,0.2)',
                         boxShadow: '0 4px 20px rgba(0,0,0,0.5)'
                     }}
                 >

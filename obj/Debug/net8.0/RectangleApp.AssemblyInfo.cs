@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RectangleApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d38778b9084ca4f96e5e47095234b030adca0bd4")]
 [assembly: System.Reflection.AssemblyProductAttribute("RectangleApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RectangleApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

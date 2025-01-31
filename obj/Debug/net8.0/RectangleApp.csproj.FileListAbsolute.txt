@@ -35,3 +35,6 @@
 /home/hega4444/code/RectangleApp/obj/Debug/net8.0/RectangleApp.pdb
 /home/hega4444/code/RectangleApp/obj/Debug/net8.0/RectangleApp.genruntimeconfig.cache
 /home/hega4444/code/RectangleApp/obj/Debug/net8.0/ref/RectangleApp.dll
+/home/hega4444/code/RectangleApp/bin/Debug/net8.0/ClientApp/tsconfig.json
+/home/hega4444/code/RectangleApp/bin/Debug/net8.0/package-lock.json
+/home/hega4444/code/RectangleApp/bin/Debug/net8.0/package.json

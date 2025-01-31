@@ -1,67 +1,83 @@
-# Rectangle SVG Application
+# Rectangle App 🟦
 
-## Overview
+An interactive rectangle drawing application with real-time validation and dynamic resizing.
 
-This project consists of a React frontend and a C# backend that allows users to draw and resize a rectangle SVG. The perimeter of the rectangle is displayed and updated based on user interactions.
+## 🚀 Features
 
-## Features
+- SVG-based rectangle with drag-to-resize functionality
+- Real-time perimeter calculation
+- Backend validation with visual feedback
+- Responsive design
+- Modern glass-morphism UI
 
-- **Resizable Rectangle**: Users can resize the rectangle using the mouse.
-- **Perimeter Display**: Shows the current perimeter of the rectangle.
-- **Initial Dimensions**: Loads initial dimensions from a JSON file via API.
-- **Backend Validation**: Validates on the backend that the rectangle's width does not exceed its height with a simulated delay.
+## 🛠️ Tech Stack
 
-## Technologies Used
+### Frontend
+- React 18
+- TypeScript
+- Material-UI (MUI)
+- SVG manipulation
 
-- **Frontend**: React, TypeScript, Material UI
-- **Backend**: C#, ASP.NET Core
-- **Others**: SVG for graphics
+### Backend
+- .NET 8.0
+- Minimal API
+- JSON file storage
 
-## Setup Instructions
-
-### Prerequisites
-
-- **Node.js and npm**: [Download and install](https://nodejs.org/)
-- **.NET 6 SDK**: [Download and install](https://dotnet.microsoft.com/download/dotnet/6.0)
-
-### Frontend Setup
-
-1. **Navigate to the `ClientApp` directory**:
-
-    ```bash
-    cd ClientApp
-    ```
-
-2. **Install dependencies**:
-
-    ```bash
-    npm install
-    ```
-
-3. **Run the frontend application**:
-
-    ```bash
-    npm start
-    ```
+## 🏃‍♂️ Running the Application
 
 ### Backend Setup
+```bash
+cd Backend
+dotnet run
+```
+The backend will start at http://localhost:5000
 
-1. **Navigate to the `Backend` directory**:
+### Frontend Setup
+```bash
+cd ClientApp
+npm install
+npm start
+```
+The frontend will start at http://localhost:3000
 
-    ```bash
-    cd Backend
-    ```
+## 🎯 Business Rules
 
-2. **Restore dependencies**:
+- Rectangle width cannot exceed height
+- Minimum dimensions: 50x50 pixels
+- Validation takes 10 seconds (simulated backend processing)
+- Users can continue resizing during validation
 
-    ```bash
-    dotnet restore
-    ```
+## 🔧 Development Notes
 
-3. **Run the backend application**:
+- Backend stores dimensions in `rectangle-config.json`
+- Frontend handles offline mode gracefully
+- Real-time visual feedback during resizing
+- Responsive layout for all screen sizes
 
-    ```bash
-    dotnet run
-    ```
+## 🧪 Project Structure
+```
+RectangleApp/
+├── Backend/
+│   ├── Program.cs          # Minimal API endpoints
+│   ├── appsettings.json    # Configuration
+│   └── Properties/
+│       └── launchSettings.json
+└── ClientApp/
+    ├── src/
+    │   ├── components/
+    │   │   └── Rectangle.tsx
+    │   ├── App.tsx
+    │   └── index.tsx
+    └── public/
+        └── index.html
+```
 
-## Project Structure 
+## 📝 Requirements
+
+- Node.js 16+
+- .NET 8.0 SDK
+- Modern web browser with SVG support
+
+## 👤 Author
+hega4444
+January 31, 2025 

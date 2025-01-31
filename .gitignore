@@ -46,4 +46,14 @@ yarn-error.log*
 .yarn-integrity
 
 # TypeScript cache
-*.tsbuildinfo 
+*.tsbuildinfo
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+
+# Except Backend build results
+!/Backend/bin/
+!/Backend/obj/ 
