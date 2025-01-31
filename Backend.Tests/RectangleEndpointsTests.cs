@@ -6,16 +6,20 @@ using System.Text.Json;
 
 namespace Backend.Tests;
 
+// This test class uses WebApplicationFactory to create a test server for integration testing
 public class RectangleEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;
+    // Configure JSON options to handle case-insensitive property matching
     private readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
 
+    // Constructor injects the WebApplicationFactory
     public RectangleEndpointsTests(WebApplicationFactory<Program> factory)
     {
         _factory = factory;
     }
 
+    // Test GET endpoint returns a successful response
     [Fact]
     public async Task Get_ReturnsSuccessAndRectangle()
     {
@@ -29,6 +33,8 @@ public class RectangleEndpointsTests : IClassFixture<WebApplicationFactory<Progr
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
+    // Test POST endpoint accepts valid rectangle dimensions
+    // Valid case: Height is greater than Width
     [Fact]
     public async Task Post_WithValidDimensions_ReturnsSuccess()
     {
@@ -47,6 +53,8 @@ public class RectangleEndpointsTests : IClassFixture<WebApplicationFactory<Progr
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
+    // Test POST endpoint rejects invalid rectangle dimensions
+    // Invalid case: Width is greater than Height
     [Fact]
     public async Task Post_WithInvalidDimensions_ReturnsBadRequest()
     {
