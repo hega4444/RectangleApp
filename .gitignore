@@ -1,59 +1,68 @@
-# Dependencies
+# .NET Core
+bin/
+obj/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+.vs/
+.vscode/
+*.dbmdl
+*.jfm
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+dist/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# Visual Studio files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+
+# React/Node.js
 node_modules/
-/.pnp
-.pnp.js
-
-# Testing
-/coverage
-
-# Production
-/build
-/dist
-
-# Environment files
-.env
+/ClientApp/build
+/ClientApp/node_modules
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-
-# IDE and Editor files
-.idea/
-.vscode/
-*.swp
-*.swo
-.DS_Store
-Thumbs.db
-
-# Debug logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Optional npm cache directory
-.npm
+# IDE specific files
+.idea/
+*.swp
+*.swo
+*~
 
-# Optional eslint cache
-.eslintcache
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# TypeScript cache
-*.tsbuildinfo
-
-# Build results
-[Bb]in/
-[Oo]bj/
-[Dd]ebug/
-[Rr]elease/
-
-# Except Backend build results
-!/Backend/bin/
-!/Backend/obj/ 
+# Test Results
+TestResults/
+[Cc]overage/
+*.coverage
+*.coveragexml 

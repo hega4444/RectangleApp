@@ -5,8 +5,6 @@ An interactive rectangle drawing application with real-time validation and dynam
 ## 🚀 Features
 
 - SVG-based rectangle with drag-to-resize functionality
-- Real-time perimeter calculation
-- Backend validation with visual feedback
 - Responsive design
 - Modern glass-morphism UI
 
@@ -20,7 +18,7 @@ An interactive rectangle drawing application with real-time validation and dynam
 
 ### Backend
 - .NET 8.0
-- Minimal API
+- ASP.NET Core Minimal API (lightweight HTTP endpoints without controllers)
 - JSON file storage
 
 ## 🏃‍♂️ Running the Application
@@ -43,7 +41,6 @@ The frontend will start at http://localhost:3000
 ## 🎯 Business Rules
 
 - Rectangle width cannot exceed height
-- Minimum dimensions: 50x50 pixels
 - Validation takes 10 seconds (simulated backend processing)
 - Users can continue resizing during validation
 
@@ -62,6 +59,8 @@ RectangleApp/
 │   ├── appsettings.json    # Configuration
 │   └── Properties/
 │       └── launchSettings.json
+├── Backend.Tests/          # Unit test project
+│   └── RectangleEndpointsTests.cs
 └── ClientApp/
     ├── src/
     │   ├── components/
@@ -71,6 +70,28 @@ RectangleApp/
     └── public/
         └── index.html
 ```
+
+## 🧪 Testing
+
+### Backend Tests
+The solution includes a comprehensive test suite using xUnit:
+
+```bash
+cd Backend.Tests
+dotnet test
+```
+
+Test coverage includes:
+- Validation of rectangle dimensions
+- API endpoint behavior
+- JSON persistence
+- Error handling scenarios
+
+Key test scenarios:
+- Ensuring width never exceeds height
+- Validating minimum dimensions (50x50)
+- Proper error responses for invalid inputs
+- Persistence of valid configurations
 
 ## 📝 Requirements
 
