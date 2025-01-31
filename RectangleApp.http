@@ -1,0 +1,6 @@
+@RectangleApp_HostAddress = http://localhost:5111
+
+GET {{RectangleApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

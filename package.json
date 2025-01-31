@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.2",
+    "@mui/material": "^6.4.2",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.11"
+  },
+  "name": "rectangleapp",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "cd ClientApp && npm start",
+    "install-client": "cd ClientApp && npm install",
+    "build": "cd ClientApp && npm run build"
+  }
+}
